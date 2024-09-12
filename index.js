@@ -1,7 +1,7 @@
 const express = require('express')
 const pg = require('pg')
 const app = express()
-const port = 2000
+const port = 5432
 const client = new pg.Client('postgres://localhost:5432/postgres')
 
 app.use(express.json());
@@ -24,7 +24,7 @@ app.post('/api/flavors', async (req, res) => {
 app.delete('/api/flavors/:id', async (req, res) => {
     const { id } = req.params;
     const response = await client.query("DELETE FROM flavors WHERE id = $1", [id]);
-    res.json(`succesfully deleted student: ${id}`);
+    res.json(`succesfully deleted flavor: ${id}`);
 })
 
 app.listen(port, async () => {
