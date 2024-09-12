@@ -4,6 +4,18 @@ const client = new pg.Client(process.env.DATABASE_URL || 'postgres://localhost/p
 const app = express()
 const port = 3000
 
+const init = async () => {
+    console.log('connected to database');
+    let SQL = ``;
+    await client.query(SQL);
+    console.log('tables created');
+    SQL = ` `;
+    await client.query(SQL);
+    console.log('data seeded');
+  };
+  
+  init();
+
 
 app.use(express.json());
 
@@ -11,14 +23,15 @@ app.get('/', (req, res) => {
     res.send('Hello World!')
 })
 
-app.get('/api/flavorss', async (req, res) => {
+app.get('/api/flavors', async (req, res) => {
     const response = await client.query("SELECT * FROM flavors");
     res.json(response.rows);
 })
 
 app.post('/api/flavors', async (req, res) => {
     const { id, name, is_favorite } = req.body;
-    const response = await client.query("INSERT INTO flavors (id,name, is_favorite) VALUES ($1, $2, $3)", [id, name, is_favorite]);
+    console.log(req.body)
+    const response = await client.query("INSERT INTO flavors (id, name, is_favorite) VALUES ($1, $2, $3)", [id, name, is_favorite]);
     res.json(`succesfully added flavor: ${name}`);
 })
 
